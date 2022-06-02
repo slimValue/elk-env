@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   elasticsearch:
-    image: "docker.elastic.co/elasticsearch/elasticsearch:${ES_VERSION}"
+    image: "elastic/elasticsearch:${ES_VERSION}"
     environment:
       - discovery.type=single-node # 将ES的集群发现模式配置为单节点模式
     volumes:
@@ -15,7 +15,7 @@ services:
   logstash:
     depends_on:
       - elasticsearch
-    image: "docker.elastic.co/logstash/logstash:${ES_VERSION}"
+    image: "elastic/logstash:${ES_VERSION}"
     volumes:
       - ./conf/logstash.conf:/usr/share/logstash/pipeline/logstash.conf # 将宿主机本地的logstash配置映射至logstash容器内部
     ports:
@@ -26,7 +26,7 @@ services:
   kibana:
     depends_on:
       - elasticsearch
-    image: "docker.elastic.co/kibana/kibana:${ES_VERSION}"
+    image: "elastic/kibana:${ES_VERSION}"
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200 # 配置ES的地址
     volumes:
@@ -40,7 +40,7 @@ services:
     depends_on:
       - elasticsearch
       - logstash
-    image: "docker.elastic.co/beats/filebeat:${ES_VERSION}"
+    image: "elastic/filebeat:${ES_VERSION}"
     user: root # 必须为root，否则会因为无权限而无法启动
     environment:
       - strict.perms=false
