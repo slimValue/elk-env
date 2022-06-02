@@ -1,0 +1,54 @@
+version: '3.4'
+
+services:
+  elasticsearch:
+    image: "docker.elastic.co/elasticsearch/elasticsearch:${ES_VERSION}"
+    environment:
+      - discovery.type=single-node # 将ES的集群发现模式配置为单节点模式
+    volumes:
+      - /etc/localtime:/etc/localtime # Docker容器中时间和宿主机同步
+      - ${DOCKER_MOUNT_DIR}/elasticsearch/data:/usr/share/elasticsearch/data # 将ES的数据映射并持久化至宿主机中
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+  logstash:
+    depends_on:
+      - elasticsearch
+    image: "docker.elastic.co/logstash/logstash:${ES_VERSION}"
+    volumes:
+      - ./conf/logstash.conf:/usr/share/logstash/pipeline/logstash.conf # 将宿主机本地的logstash配置映射至logstash容器内部
+    ports:
+      - "5044:5044"
+    links:
+      - elasticsearch
+
+  kibana:
+    depends_on:
+      - elasticsearch
+    image: "docker.elastic.co/kibana/kibana:${ES_VERSION}"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200 # 配置ES的地址
+    volumes:
+      - /etc/localtime:/etc/localtime # Docker容器中时间和宿主机同步
+    ports:
+      - "5601:5601"
+    links:
+      - elasticsearch
+
+  filebeat:
+    depends_on:
+      - elasticsearch
+      - logstash
+    image: "docker.elastic.co/beats/filebeat:${ES_VERSION}"
+    user: root # 必须为root，否则会因为无权限而无法启动
+    environment:
+      - strict.perms=false
+    volumes:
+      - ./conf/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro # 配置文件映射
+      # 映射到容器中[作为数据源]
+      - ${DOCKER_MOUNT_DIR}/filebeat/logs:/usr/share/filebeat/logs:rw # 将日志目录映射至容器中
+      - ${DOCKER_MOUNT_DIR}/filebeat/data:/usr/share/filebeat/data:rw # 将数据目录映射至容器中
+    # 将指定容器连接到当前连接，可以设置别名，避免ip方式导致的容器重启动态改变的无法连接情况
+    links:
+      - logstash
