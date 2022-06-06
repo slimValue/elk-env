@@ -27,6 +27,7 @@ services:
     depends_on:
       - elasticsearch
     image: "elastic/kibana:${ES_VERSION}"
+    user: root # 必须为root，否则会因为无权限而无法启动
     environment:
       - ELASTICSEARCH_URL=http://elasticsearch:9200 # 配置ES的地址
     volumes:
