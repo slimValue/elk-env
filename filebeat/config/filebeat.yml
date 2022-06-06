@@ -7,9 +7,13 @@ filebeat.inputs:
     multiline.pattern: ^\[
     multiline.negate: true
     multiline.match: after
+    # #包含匹配正则的行
+#    include_lines: ['^ERR', '^WARN']
+    # 不包含匹配正则的行
+#    exclude_lines: ['^DBG']
 
 filebeat.config.modules:
-  path: ${path.config}/modules.d/*.yml
+  path: modules.d/*.yml
   reload.enabled: false
 
 setup.template.settings:

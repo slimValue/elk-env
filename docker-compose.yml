@@ -16,8 +16,12 @@ services:
     depends_on:
       - elasticsearch
     image: "elastic/logstash:${ES_VERSION}"
+    user: root # 必须为root，否则会因为无权限而无法启动
     volumes:
-      - ./conf/logstash.conf:/usr/share/logstash/pipeline/logstash.conf # 将宿主机本地的logstash配置映射至logstash容器内部
+      - ./logstash/config:/usr/share/logstash/config:ro
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./logstash/data:/usr/share/logstash/data:rw
+      - ./logstash/logs:/usr/share/logstash/logs:rw
     ports:
       - "5044:5044"
     links:
@@ -32,7 +36,7 @@ services:
       - ELASTICSEARCH_URL=http://elasticsearch:9200 # 配置ES的地址
     volumes:
       - /etc/localtime:/etc/localtime # Docker容器中时间和宿主机同步
-      - ./conf/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
+      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
     ports:
       - "5601:5601"
     links:
@@ -47,7 +51,7 @@ services:
     environment:
       - strict.perms=false
     volumes:
-      - ./conf/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro # 配置文件映射
+      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro # 配置文件映射
       # 映射到容器中[作为数据源]
       - ${DOCKER_MOUNT_DIR}/filebeat/logs:/usr/share/filebeat/logs:rw # 将日志目录映射至容器中
       - ${DOCKER_MOUNT_DIR}/filebeat/data:/usr/share/filebeat/data:rw # 将数据目录映射至容器中
