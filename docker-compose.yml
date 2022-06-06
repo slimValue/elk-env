@@ -31,6 +31,7 @@ services:
       - ELASTICSEARCH_URL=http://elasticsearch:9200 # 配置ES的地址
     volumes:
       - /etc/localtime:/etc/localtime # Docker容器中时间和宿主机同步
+      - ./conf/kibana.yml:/usr/share/kibana/config/kibana.yml:ro,Z
     ports:
       - "5601:5601"
     links:
