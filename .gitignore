@@ -2,5 +2,7 @@
 ./filebeat/config/filebeat.yml
 ./kibana/config/kibana.yml
 ./logstash/pipeline/logstash.conf
+./logstash/data
+./logstash/logs
 .idea/*
 .DS_Store
