@@ -1,0 +1,6 @@
+.env
+./filebeat/config/filebeat.yml
+./kibana/config/kibana.yml
+./logstash/pipeline/logstash.conf
+.idea/*
+.DS_Store

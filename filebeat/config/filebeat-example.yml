@@ -8,7 +8,7 @@ filebeat.inputs:
     multiline.negate: true
     multiline.match: after
     # #包含匹配正则的行
-#    include_lines: ['^ERR', '^WARN']
+    #    include_lines: ['^ERR', '^WARN']
     # 不包含匹配正则的行
 #    exclude_lines: ['^DBG']
 

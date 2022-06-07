@@ -53,7 +53,7 @@ services:
     volumes:
       - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro # 配置文件映射
       # 映射到容器中[作为数据源]
-      - ${DOCKER_MOUNT_DIR}/filebeat/logs:/usr/share/filebeat/logs:rw # 将日志目录映射至容器中
+      - ${WATCH_LOG_DIR}:/usr/share/filebeat/logs:ro # 将日志目录映射至容器中
       - ${DOCKER_MOUNT_DIR}/filebeat/data:/usr/share/filebeat/data:rw # 将数据目录映射至容器中
     # 将指定容器连接到当前连接，可以设置别名，避免ip方式导致的容器重启动态改变的无法连接情况
     links:
