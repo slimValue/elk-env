@@ -6,3 +6,6 @@
 ./logstash/logs
 .idea/*
 .DS_Store
+kibana.yml
+logstash.conf
+filebeat.yml
