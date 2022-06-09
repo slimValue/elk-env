@@ -20,8 +20,8 @@ services:
     volumes:
       - ./logstash/config:/usr/share/logstash/config:ro
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
-      - ./logstash/data:/usr/share/logstash/data:rw
-      - ./logstash/logs:/usr/share/logstash/logs:rw
+      - ${DOCKER_MOUNT_DIR}/logstash/data:/usr/share/logstash/data:rw
+      - ${DOCKER_MOUNT_DIR}/logstash/logs:/usr/share/logstash/logs:rw
     ports:
       - "5044:5044"
     links:

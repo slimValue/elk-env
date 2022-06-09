@@ -25,8 +25,14 @@ cp logstash/pipline/logstash-example.yml logstash/pipline/logstash.yml
 
 # 在启动ES容器时，需要先创建好宿主机的映射目录
 # 并且配置映射目录所属
+mkdir -p ${DOCKER_MOUNT_DIR}/elasticsearch/data
+mkdir -p ${DOCKER_MOUNT_DIR}/filebeat/data
+mkdir -p ${DOCKER_MOUNT_DIR}/logstash/data
+mkdir -p ${DOCKER_MOUNT_DIR}/logstash/log
+
 sudo chown -R 1000:1000 ${DOCKER_MOUNT_DIR}/elasticsearch/data
 sudo chown -R 1000:1000 ${DOCKER_MOUNT_DIR}/filebeat/data
+sudo chown -R 1000:1000 ${DOCKER_MOUNT_DIR}/logstash
 
 # 启动
 docker-compose up -d
