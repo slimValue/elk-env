@@ -32,7 +32,9 @@ mkdir -p ${DOCKER_MOUNT_DIR}/logstash/log
 
 sudo chown -R 1000:1000 ${DOCKER_MOUNT_DIR}/elasticsearch/data
 sudo chown -R 1000:1000 ${DOCKER_MOUNT_DIR}/filebeat/data
-sudo chown -R 1000:1000 ${DOCKER_MOUNT_DIR}/logstash
+
+chmod 775 ${DOCKER_MOUNT_DIR}/logstash/data
+chmod 775 ${DOCKER_MOUNT_DIR}/logstash/logs
 
 # 启动
 docker-compose up -d
@@ -47,13 +49,4 @@ docker-compose down
 ```
 logstash/pipeline ---- /usr/share/logstash/pipeline
 logstash/config   ---- /usr/share/logstash/config
-```
-
-
-```shell
-
-chmod 777 -R ./logstash
-chmod 777 -R ./logstash/data
-chmod 777 -R ./logstash/logs
-
 ```
